@@ -7,10 +7,10 @@ proc process(file: string, data: string) {
     if data.startswith "#!" do
         data = "\n" + (get$ split_first (data, "\n")).1;
     done
+    data = '#line 2 "' + file.realpath + '"' + data;
     regex := RE2 "^//flxrun:(.*)";
     for line in split (data, "\n") perform
         for g in Match (regex, line) perform opts += g.1;
-    data = '#line 1 "' + file.realpath + '"' + data;
     dir := join (file.dirname, ".flxrun");
     Directory::mkdirs dir;
     tmp := join (dir, file.basename + ".flx");
