@@ -1,0 +1,4 @@
+#!./flxrun
+//flxrun:--usage=hyperlight
+
+println "Hello, world!";
