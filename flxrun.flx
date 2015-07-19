@@ -18,8 +18,7 @@ proc process(file: string, data: string) {
     Directory::mkdirs dir;
     tmp := join (dir, file.basename + ".flx");
     if tmp.load != data call save (tmp, data);
-    ex := Shell::system$ "flx " + opts + " " + tmp;
-    System::exit ex;
+    System::exit$ Shell::system$ "flx " + opts + " " + tmp;
 }
 
 if System::argc != 2 do
