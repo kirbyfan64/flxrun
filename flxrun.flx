@@ -1,25 +1,25 @@
 open Filename;
 
-gen realpath: string -> string = "realpath($1.c_str(), NULL)";
+gen realpath: string -> string = 'realpath($1.c_str(), NULL)';
 
 proc process(file: string, data: string) {
-    var opts = "";
-    if data.startswith "#!" do
-        data = "\n" + (get$ split_first (data, "\n")).1;
+    var opts = '';
+    if data.startswith '#!' do
+        data = '\n' + (get$ split_first (data, '\n')).1;
     done
     data = '#line 2 "' + file.realpath + '"' + data;
-    regex := RE2 "^//flxrun:(.*)";
-    for line in split (data, "\n") perform
+    regex := RE2 '^//flxrun:(.*)';
+    for line in split (data, '\n') perform
         for g in Match (regex, line) perform opts += g.1;
-    dir := join (file.dirname, ".flxrun");
+    dir := join (file.dirname, '.flxrun');
     Directory::mkdirs dir;
-    tmp := join (dir, file.basename + ".flx");
+    tmp := join (dir, file.basename + '.flx');
     if tmp.load != data call save (tmp, data);
-    System::exit$ Shell::system$ "flx " + opts + " " + tmp;
+    System::exit$ Shell::system$ 'flx ' + opts + ' ' + tmp;
 }
 
 if System::argc != 2 do
-    eprintln "usage: flxrun <file to execute>";
+    eprintln 'usage: flxrun <file to execute>';
     System::exit 1;
 done
 file := System::argv 1;
