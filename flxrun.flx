@@ -15,10 +15,12 @@ proc process(file: string, data: string) {
     Directory::mkdirs dir;
     tmp := join (dir, file.basename + '.flx');
     if tmp.load != data call save (tmp, data);
-    System::exit$ Shell::system$ 'flx ' + opts + ' ' + tmp;
+    rcmd := tmp + opts.respectful_split + Cons ('flx', Empty[string]);
+    for var i in 2 upto System::argc - 1 perform rcmd = System::argv i + rcmd;
+    System::exit$ Shell::system$ rcmd.rev;
 }
 
-if System::argc != 2 do
+if System::argc < 2 do
     eprintln 'usage: flxrun <file to execute>';
     System::exit 1;
 done
